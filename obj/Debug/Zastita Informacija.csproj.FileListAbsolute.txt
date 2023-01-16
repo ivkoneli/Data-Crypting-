@@ -1,0 +1,8 @@
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.csproj.AssemblyReference.cache
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.csproj.SuggestedBindingRedirects.cache
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.csproj.CoreCompileInputs.cache
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\Zastita Informacija.exe.config
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\Zastita Informacija.exe
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\Zastita Informacija.pdb
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.exe
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.pdb

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,79 @@ namespace Zastita_Informacija
 {
     internal class Program
     {   
+        static void RSA()
+        {
+            Console.WriteLine("############################");
+            Console.WriteLine("         CFB-PLAYFAIR       ");
+
+            RSA rsa = new RSA();
+            Console.Write("Vrednost p : ");
+            Console.WriteLine(rsa.p);
+            Console.Write("Vrednost q : "); 
+            Console.WriteLine(rsa.q);
+            Console.Write("Vrednost n : ");
+            Console.WriteLine(rsa.n);
+            Console.Write("Vrednost phi(n) : ");
+            Console.WriteLine(rsa.phi);
+            Console.Write("Vrednost e : ");
+            Console.WriteLine(rsa.e);
+            Console.Write("Vrednost d : ");
+            Console.WriteLine(rsa.d);
+
+            /*BigInteger input = 89;
+
+            for ( int i = 0; i < 20; i ++)
+            {
+                Console.Write("Input : ");
+                Console.WriteLine(input);
+                BigInteger encrypted = rsa.Crypt(input);
+                Console.Write("Encrypted : ");
+                Console.WriteLine(encrypted);
+                BigInteger decrypted = rsa.Decrypt(encrypted);
+                Console.Write("Decrypted : ");
+                Console.WriteLine(decrypted);
+                Console.WriteLine();
+                input++;
+            }*/
+
+            Console.WriteLine("Unestie vrednost koju zelite da enkriptujete ");
+            BigInteger fileInput = BigInteger.Parse(Console.ReadLine());
+
+            Console.WriteLine("Citanje iz fajla....");
+
+            string inputFile = "RSAinput.txt";
+            string outputFile = "RSAencrypted.txt";
+            string destFile = "RSAdecrypted.txt";
+
+            File.WriteAllText(inputFile, fileInput.ToString());
+
+            string encryptedText = rsa.CryptFile(inputFile, outputFile);
+            string decryptedText = rsa.DecryptFile(outputFile, destFile);
+
+            Console.Write("Input iz fajla je   : ");
+            Console.WriteLine(fileInput);
+
+            Console.Write("Kodirani input je   : ");
+            Console.WriteLine(encryptedText);
+            Console.WriteLine("I nalazi se u fajlu RSAencrypted.txt");
+
+
+            Console.WriteLine("Da li zelite da dekodirate ovu vrednost ? (da / ne )");
+            string answer = Console.ReadLine();
+            if (answer == "da")
+            {
+                Console.Write("Dekodirani input je : ");
+                Console.WriteLine(decryptedText);
+                Console.WriteLine("I nalazi se u fajlu RSAdecrypted.txt");
+            }
+            else if (answer == "ne")
+                Console.WriteLine("Kraj");
+            
+
+            Console.WriteLine("############################");
+
+
+        }
         static void CFB_playfair()
         {
             Console.WriteLine("############################");
@@ -174,10 +248,33 @@ namespace Zastita_Informacija
         {
 
 
-            //a5_1();
-            //playfair();
-            //CFB();
-            CFB_playfair();
+            Console.WriteLine("########################################################");
+            Console.WriteLine("-----------------Welcome to my crypto app---------------");
+            Console.WriteLine("Which algorithm would u like to try ? ");
+
+            Console.WriteLine("1. A5-1 ");
+            Console.WriteLine("2. Playfair");
+            Console.WriteLine("3. CFB");
+            Console.WriteLine("4. RSA");
+
+            Console.WriteLine("########################################################");
+
+            string selection = Console.ReadLine();
+
+            if (selection == "1")
+                a5_1();
+            else if (selection == "2")
+                playfair();
+            else if (selection == "3")
+                CFB();
+            else if (selection == "4")
+                RSA();
+            else
+                Console.WriteLine("Please select a option from the displayed range ");
+
+
+
+
             Console.ReadLine();
         }
     }

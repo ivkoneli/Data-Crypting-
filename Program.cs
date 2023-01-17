@@ -29,6 +29,9 @@ namespace Zastita_Informacija
             Console.Write("Vrednost d : ");
             Console.WriteLine(rsa.d);
 
+
+            rsa.BMPEncrypt();
+            rsa.BMPDecrypt();
             /*BigInteger input = 89;
 
             for ( int i = 0; i < 20; i ++)
@@ -45,7 +48,7 @@ namespace Zastita_Informacija
                 input++;
             }*/
 
-            Console.WriteLine("Unestie vrednost koju zelite da enkriptujete ");
+            /*Console.WriteLine("Unestie vrednost koju zelite da enkriptujete ");
             BigInteger fileInput = BigInteger.Parse(Console.ReadLine());
 
             Console.WriteLine("Citanje iz fajla....");
@@ -76,7 +79,7 @@ namespace Zastita_Informacija
                 Console.WriteLine("I nalazi se u fajlu RSAdecrypted.txt");
             }
             else if (answer == "ne")
-                Console.WriteLine("Kraj");
+                Console.WriteLine("Kraj");*/
             
 
             Console.WriteLine("############################");
@@ -242,6 +245,9 @@ namespace Zastita_Informacija
             }
             Console.WriteLine("");
 
+            a5.BMP3("BMPinput.bmp", "BMPencrypted.bmp", "BMPdecrypted.bmp" , key);
+
+            Console.WriteLine("############################");
 
         }
         static void Main(string[] args)

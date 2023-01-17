@@ -127,8 +127,132 @@ namespace Zastita_Informacija
             return decryptedNumbers.ToString();
 
         }
-      
-    
-// This code is contributed by Pranay Arora.
+        public void BMPEncrypt()
+        {
+            // Read all the bytes and store them into a byte array
+            byte[] imageBytes = File.ReadAllBytes("BMPinput.bmp");
+
+            // Get the first 50 bytes for the image header
+            int headerSize = 50;
+            byte[] header = new byte[headerSize];
+            Array.Copy(imageBytes, header, headerSize);
+
+            // Get the rest of the bytes for the image data
+            BigInteger dataSize = imageBytes.Length - headerSize;
+            byte[] data = new byte[(int)dataSize];
+            Array.Copy(imageBytes, headerSize, data, 0, (int)dataSize);
+
+            // Split the image data into smaller portions
+            // We need to split them into smaller chunks for our algorithm to work properly 
+            int portionSize = 1000;
+            int numberOfPortions = (int)Math.Ceiling((double)data.Length / portionSize);
+            List<byte[]> portions = new List<byte[]>();
+            for (int i = 0; i < numberOfPortions; i++)
+            {
+                int start = i * portionSize;
+                int end = (i + 1) * portionSize;
+                if (end > data.Length) end = data.Length;
+                byte[] portion = new byte[end - start];
+                Array.Copy(data, start, portion, 0, end - start);
+                portions.Add(portion);
+            }
+
+            // Encrypt each portion 
+            List<BigInteger> encryptedPortions = new List<BigInteger>();
+            foreach (byte[] portion in portions)
+            {
+                BigInteger[] bigIntArray = portion.Select(x => (BigInteger)x).ToArray();
+                foreach (BigInteger bigInteger in bigIntArray)
+                {
+                    BigInteger encryptedPortion = this.Crypt(bigInteger);
+                    encryptedPortions.Add(encryptedPortion);
+                }
+
+            }
+
+            // Concatenate the encrypted portions
+            List<byte> encryptedBytes = new List<byte>();
+            foreach (BigInteger encryptedPortion in encryptedPortions)
+            {
+                byte[] bytes = encryptedPortion.ToByteArray();
+                Array.Reverse(bytes);
+                encryptedBytes.AddRange(bytes);
+            }
+            byte[] encryptedArray = encryptedBytes.ToArray();
+
+            // Concatenate the header and the encrypted data
+            byte[] encryptedImage = new byte[headerSize + encryptedArray.Length];
+            Array.Copy(header, 0, encryptedImage, 0, headerSize);
+            Array.Copy(encryptedArray, 0, encryptedImage, headerSize, encryptedArray.Length);
+
+            // Write the encrypted image to a new file
+            File.WriteAllBytes("BMPencrypted.bmp", encryptedImage);
+
+          
+        }
+
+        public void BMPDecrypt()
+        {
+            // Read the encrypted image from the file
+            byte[] encryptedBytes = File.ReadAllBytes("BMPencrypted.bmp");
+
+            // Get the first 50 bytes for the image header
+            int headerSize = 50;
+            byte[] header = new byte[headerSize];
+            Array.Copy(encryptedBytes, header, headerSize);
+
+            // Get the rest of the bytes for the image data
+            BigInteger dataSize = encryptedBytes.Length - headerSize;
+            byte[] data = new byte[(int)dataSize];
+            Array.Copy(encryptedBytes, headerSize, data, 0, (int)dataSize);
+
+            // Split the image data into smaller portions
+            // We need to split them into smaller chunks for our algorithm to work properly 
+            int portionSize = 1000;
+            int numberOfPortions = (int)Math.Ceiling((double)data.Length / portionSize);
+            List<byte[]> portions = new List<byte[]>();
+            for (int i = 0; i < numberOfPortions; i++)
+            {
+                int start = i * portionSize;
+                int end = (i + 1) * portionSize;
+                if (end > data.Length) end = data.Length;
+                byte[] portion = new byte[end - start];
+                Array.Copy(data, start, portion, 0, end - start);
+                portions.Add(portion);
+            }
+
+            // Decrypt each portion 
+            List<BigInteger> decryptedPortions = new List<BigInteger>();
+            foreach (byte[] portion in portions)
+            {
+                BigInteger[] bigIntArray = portion.Select(x => (BigInteger)x).ToArray();
+                foreach (BigInteger bigInteger in bigIntArray)
+                {
+                    BigInteger decryptedPortion = this.Decrypt(bigInteger);
+                    decryptedPortions.Add(decryptedPortion);
+                }
+            }
+
+            // Concatenate the decrypted portions
+            List<byte> decryptedBytes = new List<byte>();
+            foreach (BigInteger decryptedPortion in decryptedPortions)
+            {
+                byte[] bytes = decryptedPortion.ToByteArray();
+                Array.Reverse(bytes);
+                decryptedBytes.AddRange(bytes);
+            }
+            byte[] decryptedArray = decryptedBytes.ToArray();
+
+            // Concatenate the header and the decrypted data
+            byte[] decryptedImage = new byte[headerSize + decryptedArray.Length];
+            Array.Copy(header, 0, decryptedImage, 0, headerSize);
+            Array.Copy(decryptedArray, 0, decryptedImage, headerSize, decryptedArray.Length);
+
+            // Write the decrypted image to a new file
+            File.WriteAllBytes("BMPdecrypted.bmp", decryptedImage);
+
+        }
+
+
     }
 }

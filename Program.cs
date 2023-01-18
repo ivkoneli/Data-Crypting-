@@ -9,7 +9,33 @@ using System.Threading.Tasks;
 namespace Zastita_Informacija
 {
     internal class Program
-    {   
+    {   static void SHA256()
+        {
+            Console.WriteLine("############################");
+            Console.WriteLine("            SHA256          ");
+
+            string inputFile1 = "RSAinput.txt";
+            string inputFile2 = "RSAdecrypted.txt";
+
+            SHA256 sha256_1 = new SHA256();
+            SHA256 sha256_2 = new SHA256();
+
+            string Filehash1 = sha256_1.ComputeFileHash(inputFile1);
+            string Filehash2 = sha256_2.ComputeFileHash(inputFile2);
+
+            string hash1 = sha256_2.ComputeHash("poruka");
+            string hash2 = sha256_1.ComputeHash("poruka");
+
+            Console.Write("Hash vrednost prvog  fajla : ");
+            Console.WriteLine(Filehash1);
+
+            Console.Write("Hash vrednost drugog fajla : ");
+            Console.WriteLine(Filehash2);
+
+
+
+            Console.WriteLine("############################");
+        }
         static void RSA()
         {
             Console.WriteLine("############################");
@@ -262,6 +288,7 @@ namespace Zastita_Informacija
             Console.WriteLine("2. Playfair");
             Console.WriteLine("3. CFB");
             Console.WriteLine("4. RSA");
+            Console.WriteLine("5. SHA256");
 
             Console.WriteLine("########################################################");
 
@@ -275,8 +302,10 @@ namespace Zastita_Informacija
                 CFB();
             else if (selection == "4")
                 RSA();
+            else if (selection == "5")
+                SHA256();
             else
-                Console.WriteLine("Please select a option from the displayed range ");
+                Console.WriteLine("Invalid");
 
 
 

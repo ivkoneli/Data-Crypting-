@@ -172,10 +172,10 @@ namespace Zastita_Informacija
             return register[register.Length - 1];
         }
 
-        public int[] Crypt(int[] input)
+        public int[] Crypt(int[] input , int[] key)
         {
             int[] result = new int[input.Length];
-            int s = 0;
+           
 
             PlaceKey(key);
 
@@ -195,19 +195,15 @@ namespace Zastita_Informacija
                 {
                     shiftRegister(ref this.regZ);
                 }
-                s = (Output(regX) ^ Output(regY) ^ Output(regZ));
-                result[i] = s ^ input[i];
+                result[i] = (Output(regX) ^ Output(regY) ^ Output(regZ))  ^ input[i];
             }
-
-
 
             return result;
         }
 
         public int[] Decrypt(int[] input, int[] key)
         {
-            PlaceKey(key);
-            return this.Crypt(input);
+            return this.Crypt(input,key);
         }
 
         public void EncryptFile(string inputFile, string outputFile, int[] key)
@@ -304,7 +300,7 @@ namespace Zastita_Informacija
 
 
             // Crypt our array of integers using A5-1 Crypt and store them into an int[] array
-            int[] encryptedArray = this.Crypt(intArray);
+            int[] encryptedArray = this.Crypt(intArray,key);
 
 
             // Convert the int array back to  byte array to store it in a file 
@@ -376,7 +372,7 @@ namespace Zastita_Informacija
                     intArray[i] = (int)portion[i];
                 }
                 this.PlaceKey(key);
-                int[] encryptedPortion = this.Crypt(intArray);
+                int[] encryptedPortion = this.Crypt(intArray,key);
                 encryptedPortions.Add(encryptedPortion);
             }
 
@@ -440,7 +436,7 @@ namespace Zastita_Informacija
                     intArray[i] = (int)Dportion[i];
                 }
                 this.PlaceKey(key);
-                int[] decryptedPortion = this.Crypt(intArray);
+                int[] decryptedPortion = this.Crypt(intArray,key);
                 decryptedPortions.Add(decryptedPortion);
             }
 
@@ -546,7 +542,7 @@ namespace Zastita_Informacija
     
             // Enkriptujemo trenutne podatke
             this.PlaceKey(key);
-            data = this.Crypt(data);
+            data = this.Crypt(data ,key);
 
             Bitmap encrypted = new Bitmap(bmp.Width, bmp.Height);
             this.setImagePixels(data, encrypted , encryptedFile);

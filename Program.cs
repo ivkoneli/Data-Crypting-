@@ -112,7 +112,7 @@ namespace Zastita_Informacija
 
 
         }
-        static void CFB_playfair()
+        /*static void CFB_playfair()
         {
             Console.WriteLine("############################");
             Console.WriteLine("         CFB-PLAYFAIR       ");
@@ -126,7 +126,7 @@ namespace Zastita_Informacija
             string decryptedText = playfair.DecryptPlayFair(encryptedText);
             Console.WriteLine(decryptedText);
 
-        }
+        }*/
         static void CFB()
         {
             Console.WriteLine("############################");
@@ -136,20 +136,20 @@ namespace Zastita_Informacija
                           0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0,
                           0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0 };
 
-            int[] input =      { 1, 0, 1, 0, 0, 1, 1, 1 };
-            int[] initVector = { 0, 1, 1, 1 ,0, 1, 0 ,1 };
+            int[] input =      { 1, 0, 1, 0, 1, 0, 1, 0};
+            int[] initVector = { 0, 1, 1, 1 };
 
 
-            Console.Write("CFB A5-1 Text  :");
+            Console.Write("          CFB A5-1 Text  :");
             for (int i = 0; i < input.Length; i++)
             {
                 Console.Write(input[i]);
             }
             Console.WriteLine();
 
-            CFB a5 = new CFB(key, initVector, 4);
+            CFB cfba5 = new CFB(key, initVector,4)  ;
 
-            int[] encryptedText = a5.Encrypt(input, key);
+            int[] encryptedText = cfba5.Encrypt(input, key);
             Console.Write("CFB A5-1 Encrypted Text  :");
             for ( int i = 0; i < encryptedText.Length; i++)
             {
@@ -157,7 +157,7 @@ namespace Zastita_Informacija
             }
 
 
-            int[] decryptedText = a5.Decrypt(encryptedText, key);
+            int[] decryptedText = cfba5.Decrypt(encryptedText, key , initVector);
             Console.WriteLine("");
             Console.Write("CFB A5-1 Decrypted Text  :");
             for ( int i = 0; i < decryptedText.Length; i++)
@@ -212,7 +212,7 @@ namespace Zastita_Informacija
             A5_1 a5 = new A5_1(key);
 
 
-            int[] kodiranInput = a5.Crypt(initVector);
+            int[] kodiranInput = a5.Crypt(input , key);
             int[] dekodiranText = a5.Decrypt(kodiranInput,key);
 
             Console.WriteLine("A5/1 - Text:");
@@ -270,8 +270,11 @@ namespace Zastita_Informacija
                 Console.Write(output[i]);
             }
             Console.WriteLine("");
+            Console.WriteLine("Encrypting BMP file........");
 
             a5.BMP3("BMPinput.bmp", "BMPencrypted.bmp", "BMPdecrypted.bmp" , key);
+
+            Console.WriteLine("File encrypted succesfully ");
 
             Console.WriteLine("############################");
 

@@ -300,7 +300,7 @@ namespace Zastita_Informacija
 
            
         }
-        public void EncryptFile(string inputFilePath, string outputFilePath)
+        public string EncryptFile(string inputFilePath, string outputFilePath)
         {
             // Read the plaintext from the input file
             string plaintext = File.ReadAllText(inputFilePath);
@@ -310,6 +310,8 @@ namespace Zastita_Informacija
 
             // Write the ciphertext to the output file
             File.WriteAllText(outputFilePath, ciphertext);
+
+            return plaintext;
         }
 
         public void DecryptFile(string inputFilePath, string outputFilePath)

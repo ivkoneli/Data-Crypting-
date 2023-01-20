@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Windows.Forms;
 using System.Threading.Tasks;
+
 
 namespace Zastita_Informacija
 {
@@ -36,6 +38,27 @@ namespace Zastita_Informacija
 
             Console.WriteLine("############################");
         }
+
+        public static void SHA256Input(string file1, out string hash)
+        {
+            Console.WriteLine("############################");
+            Console.WriteLine("            SHA256          ");
+
+            
+
+            SHA256 sha256_1 = new SHA256();
+            
+
+            hash = sha256_1.ComputeFileHash(file1);
+            
+
+
+            Console.Write("Hash vrednost fajla : ");
+            Console.WriteLine(hash);
+
+
+            Console.WriteLine("############################");
+        }
         static void RSA()
         {
             Console.WriteLine("############################");
@@ -56,9 +79,9 @@ namespace Zastita_Informacija
             Console.WriteLine(rsa.d);
 
 
-            rsa.BMPEncrypt();
-            rsa.BMPDecrypt();
-            /*BigInteger input = 89;
+            //rsa.BMPEncrypt();
+            //rsa.BMPDecrypt();
+            BigInteger input = 89;
 
             for ( int i = 0; i < 20; i ++)
             {
@@ -72,9 +95,9 @@ namespace Zastita_Informacija
                 Console.WriteLine(decrypted);
                 Console.WriteLine();
                 input++;
-            }*/
+            }
 
-            /*Console.WriteLine("Unestie vrednost koju zelite da enkriptujete ");
+            Console.WriteLine("Unestie vrednost koju zelite da enkriptujete ");
             BigInteger fileInput = BigInteger.Parse(Console.ReadLine());
 
             Console.WriteLine("Citanje iz fajla....");
@@ -105,12 +128,60 @@ namespace Zastita_Informacija
                 Console.WriteLine("I nalazi se u fajlu RSAdecrypted.txt");
             }
             else if (answer == "ne")
-                Console.WriteLine("Kraj");*/
+                Console.WriteLine("Kraj");
             
 
             Console.WriteLine("############################");
 
 
+        }
+        public static void RSAinput(int input , out int encrypted , out int decrypted)
+        {
+            RSA rsa = new RSA();
+
+            BigInteger newInput = (BigInteger)input;
+
+            Console.Write("Input : ");
+            Console.WriteLine(newInput);
+            BigInteger e = rsa.Crypt(newInput);
+            Console.Write("Encrypted : ");
+            Console.WriteLine(e);
+            BigInteger d = rsa.Decrypt(e);
+            Console.Write("Decrypted : ");
+            Console.WriteLine(d);
+            Console.WriteLine();
+
+            encrypted = (int)e;
+            decrypted = (int)d;
+        }
+
+        public static void RSAinputFILE(string filepath , out string encryptedText , out string decryptedText)
+        {
+            RSA rsa = new RSA();
+
+            Console.WriteLine("Citanje iz fajla....");
+
+            string inputFile = filepath;
+            string outputFile = "RSAencrypted.txt";
+            string destFile = "RSAdecrypted.txt";
+
+
+            encryptedText = rsa.CryptFile(inputFile, outputFile);
+            decryptedText = rsa.DecryptFile(outputFile, destFile);
+
+
+            Console.Write("Kodirani input je   : ");
+            Console.WriteLine(encryptedText);
+            Console.WriteLine("I nalazi se u fajlu RSAencrypted.txt");
+
+
+
+            Console.Write("Dekodirani input je : ");
+            Console.WriteLine(decryptedText);
+            Console.WriteLine("I nalazi se u fajlu RSAdecrypted.txt");
+           
+
+            Console.WriteLine("############################");
         }
         /*static void CFB_playfair()
         {
@@ -127,7 +198,7 @@ namespace Zastita_Informacija
             Console.WriteLine(decryptedText);
 
         }*/
-        static void CFB()
+        public static void CFB(int[] input , out int[] encryptedText , out int[] decryptedText )
         {
             Console.WriteLine("############################");
             Console.WriteLine("             CFB            ");
@@ -136,7 +207,7 @@ namespace Zastita_Informacija
                           0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0,
                           0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0 };
 
-            int[] input =      { 1, 0, 1, 0, 1, 0, 1, 0};
+            
             int[] initVector = { 0, 1, 1, 1 };
 
 
@@ -149,7 +220,7 @@ namespace Zastita_Informacija
 
             CFB cfba5 = new CFB(key, initVector,4)  ;
 
-            int[] encryptedText = cfba5.Encrypt(input, key);
+            encryptedText = cfba5.Encrypt(input, key);
             Console.Write("CFB A5-1 Encrypted Text  :");
             for ( int i = 0; i < encryptedText.Length; i++)
             {
@@ -157,7 +228,7 @@ namespace Zastita_Informacija
             }
 
 
-            int[] decryptedText = cfba5.Decrypt(encryptedText, key , initVector);
+            decryptedText = cfba5.Decrypt(encryptedText, key , initVector);
             Console.WriteLine("");
             Console.Write("CFB A5-1 Decrypted Text  :");
             for ( int i = 0; i < decryptedText.Length; i++)
@@ -197,6 +268,116 @@ namespace Zastita_Informacija
 
 
         }
+        public static void playfairFileInput(string filePath , out string plaintext)
+        {
+            string key = "MONARCHY";
+            playfair pf = new playfair(key);
+
+            Console.WriteLine("Citanje iz fajla...");
+            string inputFile = filePath;
+            string encryptedFile = "playfairEncrypted.txt";
+            string outputFile = "playfairOutput.txt";
+
+            plaintext = pf.EncryptFile(inputFile, encryptedFile);
+            pf.DecryptFile(encryptedFile, outputFile);
+
+            Console.WriteLine("############################");
+        }
+
+        public static void  playfairInput(string plaintext , out string encryptedText , out string decryptedText)
+        {
+            Console.WriteLine("############################");
+            Console.WriteLine("           PLAYFAIR         ");
+            string key = "MONARCHY";
+            playfair pf = new playfair(key);
+            Console.Write("Text to encrypt :");
+            Console.WriteLine(plaintext);
+            Console.WriteLine("");
+            encryptedText = pf.Crypt(plaintext);
+            Console.Write("Encrypted text :");
+            Console.WriteLine(encryptedText);
+            Console.WriteLine("Decrypting the new message...");
+            Console.WriteLine();
+            decryptedText = pf.Decrypt(encryptedText);
+            Console.WriteLine("Decrypted text : ", decryptedText);
+            Console.WriteLine("");
+            Console.WriteLine("Citanje iz fajla...");
+            string inputFile = "playfairInput.txt";
+            string encryptedFile = "playfairEncrypted.txt";
+            string outputFile = "playfairOutput.txt";
+
+            pf.EncryptFile(inputFile, encryptedFile);
+            pf.DecryptFile(encryptedFile, outputFile);
+
+            Console.WriteLine("############################");
+        }
+        public static void a5_1FileInput(int[] key ,int[] inputzaFajl ,out int[] encryptedText , out int[] decryptedText )
+        {
+            A5_1 a5 = new A5_1(key);
+
+            // Writing test input to a binary file
+            string inputFile = "A5_1input.bin";
+            BinaryWriter bw = new BinaryWriter(new FileStream(inputFile, FileMode.Create));
+            for (int i = 0; i < inputzaFajl.Length; i++)
+            {
+                bw.Write(inputzaFajl[i]);
+            }
+            bw.Close();
+
+            // Encrypt our test file using A5/1 
+            string outputFile = "a5_1encrypted.bin";
+            a5.EncryptFile(inputFile, outputFile, key);
+
+            // Read from the encrypted file
+            encryptedText = new int[8];
+            BinaryReader br1 = new BinaryReader(new FileStream(outputFile, FileMode.Open));
+            for (int i = 0; i < 8; i++)
+            {
+                encryptedText[i] = br1.ReadInt32();
+            }
+            br1.Close();
+
+            Console.WriteLine("Enkriptovani text :");
+            for (int i = 0; i < 8; i++)
+            {
+                Console.Write(encryptedText[i]);
+            }
+            Console.WriteLine();
+
+            // Decrypt our encrypted file using the same key
+            inputFile = "a5_1encrypted.bin";
+            outputFile = "a5_1decrypted.bin";
+            a5.DecryptFile(inputFile, outputFile, key);
+
+            // Read from the decrypted file
+            decryptedText = new int[8];
+            BinaryReader br2 = new BinaryReader(new FileStream(outputFile, FileMode.Open));
+            for (int i = 0; i < 8; i++)
+            {
+                decryptedText[i] = br2.ReadInt32();
+            }
+            br2.Close();
+
+            Console.WriteLine("Dekriptovani text :");
+            for (int i = 0; i < 8; i++)
+            {
+                Console.Write(decryptedText[i]);
+            }
+            Console.WriteLine();
+        }
+        public static void a5_1BMPInput(int[] key , string inputFile)
+        {
+            A5_1 a5 = new A5_1(key);
+
+            Console.WriteLine("");
+            Console.WriteLine("Encrypting BMP file........");
+
+            a5.BMP3(inputFile, "BMPencrypted.bmp", "BMPdecrypted.bmp", key);
+
+            Console.WriteLine("File encrypted succesfully ");
+
+            Console.WriteLine("############################");
+        }
         static void a5_1()
         {
             Console.WriteLine("############################");
@@ -208,11 +389,16 @@ namespace Zastita_Informacija
 
             int[] input =       { 1, 1, 1, 1, 1, 1, 1 ,0 };
             int[] inputzaFajl = { 1, 1, 1, 1, 1, 1, 1, 0 };
-            int[] initVector =  { 0, 1, 1, 1, 0, 1, 0, 1 };
+
+            //int[] initVector =  { 0, 1, 1, 1, 0, 1, 0, 1 };
             A5_1 a5 = new A5_1(key);
+            int[] text1, text2;
 
+            a5_1FileInput(key, inputzaFajl, out text1 , out text2);
 
-            int[] kodiranInput = a5.Crypt(input , key);
+            a5_1BMPInput(key, "BMPinput.bmp");
+
+            /*int[] kodiranInput = a5.Crypt(input , key);
             int[] dekodiranText = a5.Decrypt(kodiranInput,key);
 
             Console.WriteLine("A5/1 - Text:");
@@ -235,53 +421,16 @@ namespace Zastita_Informacija
             {
                 Console.Write(dekodiranText[i]);
             }
-            Console.WriteLine("");
-
-            // Writing test input to a binary file
-            string inputFile = "A5_1input.bin";
-            BinaryWriter bw = new BinaryWriter(new FileStream(inputFile, FileMode.Create));
-            for ( int i = 0; i < 8; i++)
-            {
-                bw.Write(inputzaFajl[i]);
-            }         
-            bw.Close();
-
-            // Encrypt our test file using A5/1 
-            string outputFile = "a5_1encrypted.bin";
-            a5.EncryptFile(inputFile,outputFile,key);
-
-            // Decrypt our encrypted file using the same key
-            inputFile = "a5_1encrypted.bin";
-            outputFile = "a5_1decrypted.bin";
-            a5.DecryptFile(inputFile,outputFile,key);
-
-            // Read from the decrypted file
-            int[] output = new int[8];
-            BinaryReader br = new BinaryReader(new FileStream(outputFile, FileMode.Open));
-            for (int i = 0; i < 8; i++)
-            {
-                output[i] = br.ReadInt32();
-            }
-            br.Close();
-
-            Console.WriteLine("Dekriptovani text :");
-            for (int i = 0; i < 8; i++)
-            {
-                Console.Write(output[i]);
-            }
-            Console.WriteLine("");
-            Console.WriteLine("Encrypting BMP file........");
-
-            a5.BMP3("BMPinput.bmp", "BMPencrypted.bmp", "BMPdecrypted.bmp" , key);
-
-            Console.WriteLine("File encrypted succesfully ");
-
-            Console.WriteLine("############################");
+            Console.WriteLine("");*/
 
         }
+
+        [STAThread]
         static void Main(string[] args)
         {
-
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new AeroWizard1());
 
             Console.WriteLine("########################################################");
             Console.WriteLine("-----------------Welcome to my crypto app---------------");
@@ -301,8 +450,8 @@ namespace Zastita_Informacija
                 a5_1();
             else if (selection == "2")
                 playfair();
-            else if (selection == "3")
-                CFB();
+            //else if (selection == "3")
+                //CFB();
             else if (selection == "4")
                 RSA();
             else if (selection == "5")

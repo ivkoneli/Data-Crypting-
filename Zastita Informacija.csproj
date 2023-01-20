@@ -33,10 +33,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AeroWizard, Version=2.3.0.0, Culture=neutral, PublicKeyToken=915e74f5d64b8f37, processorArchitecture=MSIL">
+      <HintPath>packages\AeroWizard.2.3.0\lib\net45\AeroWizard.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="A5-1.cs" />
+    <Compile Include="AeroWizard1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AeroWizard1.Designer.cs">
+      <DependentUpon>AeroWizard1.cs</DependentUpon>
+    </Compile>
     <Compile Include="CFB.cs" />
     <Compile Include="playfair.cs" />
     <Compile Include="Program.cs" />
@@ -54,8 +67,13 @@
     <Compile Include="SHA256.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="A5_1input.bin" />
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AeroWizard1.resx">
+      <DependentUpon>AeroWizard1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -247,12 +247,12 @@ namespace Zastita_Informacija
             }
             br.Close();
 
-            Console.WriteLine("Text iz fajla : ");
+            /*Console.WriteLine("Text iz fajla : ");
             for (int i = 0; i < input.Length; i++)
             {
                 Console.Write(input[i]);
             }
-            Console.WriteLine("");
+            Console.WriteLine("");*/
 
             int[] output = new int[8];
             output = this.Decrypt(input, key);

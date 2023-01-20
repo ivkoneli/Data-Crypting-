@@ -6,3 +6,15 @@ C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.
 C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.csproj.CoreCompileInputs.cache
 C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.exe
 C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.pdb
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\AeroWizard.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\AeroWizard.xml
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\de\AeroWizard.resources.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\es\AeroWizard.resources.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\fr\AeroWizard.resources.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\it\AeroWizard.resources.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\pl\AeroWizard.resources.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\ru\AeroWizard.resources.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\bin\Debug\zh-CN\AeroWizard.resources.dll
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita_Informacija.AeroWizard1.resources
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.csproj.GenerateResource.cache
+C:\Users\Andrija\source\repos\Zastita Informacija\obj\Debug\Zastita Informacija.csproj.CopyComplete

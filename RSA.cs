@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace Zastita_Informacija
 {
@@ -17,23 +18,52 @@ namespace Zastita_Informacija
         public BigInteger d;   // private key := generate with our values 
         public BigInteger phi; // phi ( n )  = ( p - 1) * ( q - 1)
 
+
+        // Initializations 
         public RSA()
         {
-            this.p = 53; /* generateRandomNumber();*/ this.q = 59; /*generateRandomNumber();*/ this.n = p * q; this.phi = (p - 1) * (q - 1);
+            this.p = generateRandomNumber(); this.q = generateRandomNumber(); this.n = p * q; this.phi = (p - 1) * (q - 1);
             this.e = generatePublicKey(this.phi); this.d = generatePrivateKey(this.phi);
         }
+
+        // Generating our p and q values 
+
         public BigInteger generateRandomNumber()
         {
-            //DateTime foo = DateTime.Now;
-            //int unixTime = (int)((DateTimeOffset)foo).ToUnixTimeSeconds();
+            BigInteger number;
+            do
+            {
+                // Cryptographic lib that helps give us secure random numbers 
 
-            Random rnd = new Random();
-            byte[] randomBytes = new byte[4];
-            rnd.NextBytes(randomBytes);
-
-            int number = BitConverter.ToInt32(randomBytes, 0);
+                using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+                {
+                    byte[] randomBytes = new byte[7];
+                    rng.GetBytes(randomBytes);
+                    number = new BigInteger(randomBytes);
+                }
+            } while (!isPrime(number));
 
             return number;
+        }
+
+        // Helper to determine if its a prime number and return it 
+        private bool isPrime(BigInteger number)
+        {
+            if (number <= 1)
+                return false;
+            if (number == 2 || number == 3)
+                return true;
+            if (number % 2 == 0 || number % 3 == 0)
+                return false;
+
+            int limit = (int)Math.Sqrt((double)number);
+            for (int i = 5; i <= limit; i += 6)
+            {
+                if (number % i == 0 || number % (i + 2) == 0)
+                    return false;
+            }
+
+            return true;
         }
         // Greatest Commond Divisor 
         public static BigInteger gcd(BigInteger a, BigInteger b)
@@ -84,50 +114,97 @@ namespace Zastita_Informacija
             }
             return d; 
         }
-        public BigInteger Crypt(BigInteger message)
+
+        // MAP a-z => 1-26 so we can take in string inputs 
+
+        public BigInteger EncodeString(string input)
         {
-            BigInteger encrypted ;
-            encrypted = BigInteger.ModPow(message, this.e, this.n);
+            input = input.ToLower().Replace(" ",""); // convert the input string to lowercase
+            BigInteger encodedNumber = new BigInteger();
+
+            foreach (char c in input)
+            {
+                int charValue = (int)c - 96; // subtract 96 to convert the ASCII value to 1-26
+                encodedNumber = encodedNumber * 27 + charValue; // multiply the previous number by 27 and add the current char value
+            }
+
+            return encodedNumber;
+        }
+
+        // Decode 1-26 back to original text after decrypting 
+        public string DecodeString(BigInteger input)
+        {
+            string decodedString = "";
+            while (input > 0)
+            {
+                int charValue = (int)(input % 27) + 96; // add 96 to convert the value to an ASCII value
+                char c = (char)charValue; // convert the ASCII value to a character
+                decodedString = c + decodedString; // prepend the current character to the decoded string
+                input /= 27;
+            }
+
+            return decodedString;
+        }
+
+        // ModPow with private key 
+        public BigInteger Crypt(string message)
+        {
+
+
+            BigInteger encrypted; 
+            BigInteger input = EncodeString(message);
+
+            encrypted = BigInteger.ModPow(input, this.e, this.n);
            
 
             return encrypted;
         }
 
-        public BigInteger Decrypt(BigInteger encrypted)
+        // ModPow with public key to reverse it 
+        public string Decrypt(BigInteger encrypted)
         {
             BigInteger decrypted ;
             decrypted = BigInteger.ModPow(encrypted, this.d, this.n);
-         
-      
 
-            return decrypted;
+            string decryptedString = DecodeString(decrypted);
+
+            return decryptedString;
         }
+
+        // Read , crypt , write to new file and return text so we can print it 
 
         public string CryptFile(string inputFile , string outputFile)
         {
             string input = File.ReadAllText(inputFile);
 
-            BigInteger numberInput = BigInteger.Parse(input);
-            BigInteger encryptedInput = Crypt(numberInput);
+            //BigInteger numberInput = BigInteger.Parse(input);
+            BigInteger encryptedInput = Crypt(input);
 
             File.WriteAllText(outputFile, encryptedInput.ToString());
 
             return encryptedInput.ToString();
         }
 
+        // Read , decrypt , write to new file and retrun the string to display it 
+
         public string DecryptFile(string sourceFile , string destinationFile)
         {
             string encryptedText = File.ReadAllText(sourceFile);
 
             BigInteger numberInput = BigInteger.Parse(encryptedText);
-            BigInteger decryptedNumbers = Decrypt(numberInput);
+            string decryptedNumbers = Decrypt(numberInput);
 
             File.WriteAllText(destinationFile, decryptedNumbers.ToString());
 
             return decryptedNumbers.ToString();
 
         }
-        public void BMPEncrypt()
+
+        // Slika se duplira u velicini u procesu enkripcije zbog modpow funckije 
+        // Fix bi bio da napisem svoju modpow funkciju sa koja ne bi narusavala strukturu , ali BMP ucitavnje radi za a5-1 algoritam
+
+
+        /*public void BMPEncrypt()
         {
             // Read all the bytes and store them into a byte array
             byte[] imageBytes = File.ReadAllBytes("BMPinput.bmp");
@@ -189,9 +266,9 @@ namespace Zastita_Informacija
             File.WriteAllBytes("BMPencrypted.bmp", encryptedImage);
 
           
-        }
+        }*/
 
-        public void BMPDecrypt()
+        /*public void BMPDecrypt()
         {
             // Read the encrypted image from the file
             byte[] encryptedBytes = File.ReadAllBytes("BMPencrypted.bmp");
@@ -251,7 +328,7 @@ namespace Zastita_Informacija
             // Write the decrypted image to a new file
             File.WriteAllBytes("BMPdecrypted.bmp", decryptedImage);
 
-        }
+        }*/
 
 
     }

@@ -76,6 +76,8 @@ namespace Zastita_Informacija
             }
             return 0;
         }
+
+        // Funkcija za ucitavnje kljuca u registre
         public void PlaceKey(int[] key)
         {
             // Prazan kljuc 
@@ -172,6 +174,7 @@ namespace Zastita_Informacija
             return register[register.Length - 1];
         }
 
+        // Logika za kriptovanje 
         public int[] Crypt(int[] input , int[] key)
         {
             int[] result = new int[input.Length];
@@ -201,11 +204,12 @@ namespace Zastita_Informacija
             return result;
         }
 
+        // Dekriptovanje je isto zato sto je simetrican kljuc
         public int[] Decrypt(int[] input, int[] key)
         {
             return this.Crypt(input,key);
         }
-
+        // Citanje 8bit fiksnog niza 
         public void EncryptFile(string inputFile, string outputFile, int[] key)
         {
             //BinaryReader br = new BinaryReader(new FileStream(inputFile, FileMode.Open));
@@ -277,11 +281,13 @@ namespace Zastita_Informacija
 
 
         }
-
+        // Dekriptovanje 
         public void DecryptFile(string inputFile, string outputFile, int[] key)
         {
             EncryptFile(inputFile, outputFile, key);
         }
+
+        // BMP bez odvajanja headera 
         public void BMP(int[] key)
         {
             // Read all the bytes and store them into a byte array
@@ -331,14 +337,14 @@ namespace Zastita_Informacija
             File.WriteAllBytes("BMPdecrypted.bmp", decryptedBytes);
 
         }
-
+        // BMP sa odvajanjem headera
         public void BMP2(int[] key)
         {
             // Read all the bytes and store them into a byte array
             byte[] imageBytes = File.ReadAllBytes("BMPinput.bmp");
 
             // Get the first 50 bytes for the image header
-            int headerSize = 34; 
+            int headerSize = 34;   // 34 je minimum 
             byte[] header = new byte[headerSize];
             Array.Copy(imageBytes, header, headerSize);
 
@@ -349,7 +355,7 @@ namespace Zastita_Informacija
 
             // Split the image data into smaller portions
             // We need to split them into smaller chunks for our algorithm to work properly 
-            int portionSize = 100; 
+            int portionSize = 100;  
             int numberOfPortions = (int)Math.Ceiling((double)data.Length / portionSize);
             List<byte[]> portions = new List<byte[]>();
             for (int i = 0; i < numberOfPortions; i++)
@@ -465,6 +471,8 @@ namespace Zastita_Informacija
             File.WriteAllBytes("BMPdecrypted.bmp", decryptedImage);
         }
 
+        // store pixels from bmp file into an array
+
         public int[] getImagePixels(Bitmap bmp)
         {
             // Storing our data 
@@ -499,6 +507,7 @@ namespace Zastita_Informacija
             return data;
         }
 
+        // load pixels from an array into a bmp image
         public void setImagePixels(int[] data ,Bitmap bitmap , string file)
         {
             
@@ -530,6 +539,7 @@ namespace Zastita_Informacija
             bitmap.Save(file, ImageFormat.Bmp);
         }
         // Working 
+        
         public void BMP3(string inputFile ,string encryptedFile,string decryptedFile, int[] key)
         {
 

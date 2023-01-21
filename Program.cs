@@ -11,7 +11,10 @@ using System.Threading.Tasks;
 namespace Zastita_Informacija
 {
     internal class Program
-    {   static void SHA256()
+
+    {  
+        // Pozivi funkcija za konzolu 
+        static void SHA256()
         {
             Console.WriteLine("############################");
             Console.WriteLine("            SHA256          ");
@@ -39,26 +42,7 @@ namespace Zastita_Informacija
             Console.WriteLine("############################");
         }
 
-        public static void SHA256Input(string file1, out string hash)
-        {
-            Console.WriteLine("############################");
-            Console.WriteLine("            SHA256          ");
 
-            
-
-            SHA256 sha256_1 = new SHA256();
-            
-
-            hash = sha256_1.ComputeFileHash(file1);
-            
-
-
-            Console.Write("Hash vrednost fajla : ");
-            Console.WriteLine(hash);
-
-
-            Console.WriteLine("############################");
-        }
         static void RSA()
         {
             Console.WriteLine("############################");
@@ -81,21 +65,21 @@ namespace Zastita_Informacija
 
             //rsa.BMPEncrypt();
             //rsa.BMPDecrypt();
-            BigInteger input = 89;
+            string input = "cao";
 
-            for ( int i = 0; i < 20; i ++)
-            {
-                Console.Write("Input : ");
-                Console.WriteLine(input);
-                BigInteger encrypted = rsa.Crypt(input);
-                Console.Write("Encrypted : ");
-                Console.WriteLine(encrypted);
-                BigInteger decrypted = rsa.Decrypt(encrypted);
-                Console.Write("Decrypted : ");
-                Console.WriteLine(decrypted);
-                Console.WriteLine();
-                input++;
-            }
+         
+           
+            Console.Write("Input : ");
+            Console.WriteLine(input);
+            BigInteger encrypted = rsa.Crypt(input);
+            Console.Write("Encrypted : ");
+            Console.WriteLine(encrypted);
+            string decrypted = rsa.Decrypt(encrypted);
+            Console.Write("Decrypted : ");
+            Console.WriteLine(decrypted);
+            Console.WriteLine();
+                
+            
 
             Console.WriteLine("Unestie vrednost koju zelite da enkriptujete ");
             BigInteger fileInput = BigInteger.Parse(Console.ReadLine());
@@ -135,54 +119,7 @@ namespace Zastita_Informacija
 
 
         }
-        public static void RSAinput(int input , out int encrypted , out int decrypted)
-        {
-            RSA rsa = new RSA();
 
-            BigInteger newInput = (BigInteger)input;
-
-            Console.Write("Input : ");
-            Console.WriteLine(newInput);
-            BigInteger e = rsa.Crypt(newInput);
-            Console.Write("Encrypted : ");
-            Console.WriteLine(e);
-            BigInteger d = rsa.Decrypt(e);
-            Console.Write("Decrypted : ");
-            Console.WriteLine(d);
-            Console.WriteLine();
-
-            encrypted = (int)e;
-            decrypted = (int)d;
-        }
-
-        public static void RSAinputFILE(string filepath , out string encryptedText , out string decryptedText)
-        {
-            RSA rsa = new RSA();
-
-            Console.WriteLine("Citanje iz fajla....");
-
-            string inputFile = filepath;
-            string outputFile = "RSAencrypted.txt";
-            string destFile = "RSAdecrypted.txt";
-
-
-            encryptedText = rsa.CryptFile(inputFile, outputFile);
-            decryptedText = rsa.DecryptFile(outputFile, destFile);
-
-
-            Console.Write("Kodirani input je   : ");
-            Console.WriteLine(encryptedText);
-            Console.WriteLine("I nalazi se u fajlu RSAencrypted.txt");
-
-
-
-            Console.Write("Dekodirani input je : ");
-            Console.WriteLine(decryptedText);
-            Console.WriteLine("I nalazi se u fajlu RSAdecrypted.txt");
-           
-
-            Console.WriteLine("############################");
-        }
         /*static void CFB_playfair()
         {
             Console.WriteLine("############################");
@@ -258,16 +195,70 @@ namespace Zastita_Informacija
             Console.WriteLine("");
             Console.WriteLine("Citanje iz fajla...");
             string inputFile = "playfairInput.txt";
+            string parallelInput = "playfairParallel.txt";
             string encryptedFile = "playfairEncrypted.txt";
             string outputFile = "playfairOutput.txt";
 
             pf.EncryptFile(inputFile, encryptedFile);
             pf.DecryptFile(encryptedFile, outputFile);
 
+            pf.EncryptFileParalel(parallelInput, encryptedFile);
+            pf.DecryptFileParallel(encryptedFile, outputFile);
+
             Console.WriteLine("############################");
 
 
         }
+
+        static void a5_1()
+        {
+            Console.WriteLine("############################");
+            Console.WriteLine("             A5-1           ");
+            int[] key = { 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1,
+                          1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
+                          0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0,
+                          0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0 };
+
+            int[] input = { 1, 1, 1, 1, 1, 1, 1, 0 };
+            int[] inputzaFajl = { 1, 1, 1, 1, 1, 1, 1, 0 };
+
+            //int[] initVector =  { 0, 1, 1, 1, 0, 1, 0, 1 };
+            A5_1 a5 = new A5_1(key);
+            int[] text1, text2;
+
+            a5_1FileInput(key, inputzaFajl, out text1, out text2);
+
+            a5_1BMPInput(key, "BMPinput.bmp");
+
+            /*int[] kodiranInput = a5.Crypt(input , key);
+            int[] dekodiranText = a5.Decrypt(kodiranInput,key);
+
+            Console.WriteLine("A5/1 - Text:");
+            for (int i = 0; i < input.Length; i++)
+            {
+                Console.Write(input[i]);
+            }
+            Console.WriteLine("");
+
+            Console.WriteLine("A5/1 - Cipher:");
+            for (int i = 0; i < kodiranInput.Length; i++)
+            {
+                Console.Write(kodiranInput[i]);
+            }
+            Console.WriteLine("");
+
+
+            Console.WriteLine("A5/1 - Dekodiran Text:");
+            for (int i = 0; i < dekodiranText.Length; i++)
+            {
+                Console.Write(dekodiranText[i]);
+            }
+            Console.WriteLine("");*/
+
+        }
+
+
+        // Pozivi funkcija za forme 
         public static void playfairFileInput(string filePath , out string plaintext)
         {
             string key = "MONARCHY";
@@ -311,6 +302,7 @@ namespace Zastita_Informacija
 
             Console.WriteLine("############################");
         }
+
         public static void a5_1FileInput(int[] key ,int[] inputzaFajl ,out int[] encryptedText , out int[] decryptedText )
         {
             A5_1 a5 = new A5_1(key);
@@ -378,59 +370,92 @@ namespace Zastita_Informacija
 
             Console.WriteLine("############################");
         }
-        static void a5_1()
+        public static void RSAinputFILE(string filepath, out string encryptedText, out string decryptedText)
         {
+            RSA rsa = new RSA();
+
+            Console.WriteLine("Citanje iz fajla....");
+
+            string inputFile = filepath;
+            string outputFile = "RSAencrypted.txt";
+            string destFile = "RSAdecrypted.txt";
+
+
+            encryptedText = rsa.CryptFile(inputFile, outputFile);
+            decryptedText = rsa.DecryptFile(outputFile, destFile);
+
+
+            Console.Write("Kodirani input je   : ");
+            Console.WriteLine(encryptedText);
+            Console.WriteLine("I nalazi se u fajlu RSAencrypted.txt");
+
+
+
+            Console.Write("Dekodirani input je : ");
+            Console.WriteLine(decryptedText);
+            Console.WriteLine("I nalazi se u fajlu RSAdecrypted.txt");
+
+
             Console.WriteLine("############################");
-            Console.WriteLine("             A5-1           ");
-            int[] key = { 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1,
-                          1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
-                          0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0,
-                          0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0 };
-
-            int[] input =       { 1, 1, 1, 1, 1, 1, 1 ,0 };
-            int[] inputzaFajl = { 1, 1, 1, 1, 1, 1, 1, 0 };
-
-            //int[] initVector =  { 0, 1, 1, 1, 0, 1, 0, 1 };
-            A5_1 a5 = new A5_1(key);
-            int[] text1, text2;
-
-            a5_1FileInput(key, inputzaFajl, out text1 , out text2);
-
-            a5_1BMPInput(key, "BMPinput.bmp");
-
-            /*int[] kodiranInput = a5.Crypt(input , key);
-            int[] dekodiranText = a5.Decrypt(kodiranInput,key);
-
-            Console.WriteLine("A5/1 - Text:");
-            for (int i = 0; i < input.Length; i++)
-            {
-                Console.Write(input[i]);
-            }
-            Console.WriteLine("");
-
-            Console.WriteLine("A5/1 - Cipher:");
-            for (int i = 0; i < kodiranInput.Length; i++)
-            {
-                Console.Write(kodiranInput[i]);
-            }
-            Console.WriteLine("");
-
-
-            Console.WriteLine("A5/1 - Dekodiran Text:");
-            for (int i = 0; i < dekodiranText.Length; i++)
-            {
-                Console.Write(dekodiranText[i]);
-            }
-            Console.WriteLine("");*/
-
         }
 
+        public static void RSAinput(string input, out BigInteger encrypted, out string decrypted)
+        {
+            RSA rsa = new RSA();
+
+
+
+            Console.Write("Input : ");
+            Console.WriteLine(input);
+            BigInteger e = rsa.Crypt(input);
+            Console.Write("Encrypted : ");
+            Console.WriteLine(e);
+            string d = rsa.Decrypt(e);
+            Console.Write("Decrypted : ");
+            Console.WriteLine(d);
+            Console.WriteLine();
+
+            encrypted = e;
+            decrypted = d;
+        }
+
+        public static void SHA256Input(string file1, out string hash)
+        {
+            Console.WriteLine("############################");
+            Console.WriteLine("            SHA256          ");
+
+
+
+            SHA256 sha256_1 = new SHA256();
+
+
+            hash = sha256_1.ComputeFileHash(file1);
+
+
+
+            Console.Write("Hash vrednost fajla : ");
+            Console.WriteLine(hash);
+
+
+            Console.WriteLine("############################");
+        }
+
+
+
+        // Forma nije htela da radi bez ovog taga a sa njim paralelizacija ne radi 
         [STAThread]
         static void Main(string[] args)
         {
+            // Komentarisanjem ove tri linije dobijamo prikaz konzolne aplikacije koja prikazuje vrednosti uporedo sa izvrsavanjem funckija u formi
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new AeroWizard1());
+
+            //
+            
+
+
 
             Console.WriteLine("########################################################");
             Console.WriteLine("-----------------Welcome to my crypto app---------------");
@@ -450,7 +475,7 @@ namespace Zastita_Informacija
                 a5_1();
             else if (selection == "2")
                 playfair();
-            //else if (selection == "3")
+            //else if (selection == "3")   CFB je implementiran u okviru a5-1
                 //CFB();
             else if (selection == "4")
                 RSA();

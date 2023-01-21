@@ -19,6 +19,9 @@ namespace Zastita_Informacija
             feedback = initvector;
             this.blockSize = blockSize;
         }    
+
+        // Crypt the IV then our ciphertext = feedback XOR plaintext blocks and 
+        // we iterate that for each block 
         public int[] Encrypt(int[] inputArray, int[] key)
         {
             int[] ciphertext = new int[inputArray.Length];

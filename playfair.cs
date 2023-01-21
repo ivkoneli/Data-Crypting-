@@ -79,6 +79,7 @@ namespace Zastita_Informacija
             }
         }
 
+        // Getting (i,j) 
         public List<int> GetPos(char c)
         {
             List<int> pos = new List<int>();
@@ -103,6 +104,9 @@ namespace Zastita_Informacija
         }
         public string Crypt(string text)
         {
+
+            // Prints how our table looks with the key inserted 
+
             Console.WriteLine("Play fair Keytable : ");
             for (int i = 0; i < size; i++)
             {
@@ -171,13 +175,15 @@ namespace Zastita_Informacija
                 // same row
                 if (x[0] == y[0])
                 {
-                    encryptedtext.Add(table[x[0], (x[1]+ 1 ) % size]);
+                    // wrap around if its the edge element using % size 
+                    encryptedtext.Add(table[x[0], (x[1]+  1) % size]);
                     encryptedtext.Add(table[y[0], (y[1] + 1) % size]);
 
                 }
                 // same column
                 else if (x[1] == y[1])
                 {
+                    // wrap
                     encryptedtext.Add(table[(x[0] + 1) % size, x[1]]);
                     encryptedtext.Add(table[(y[0] + 1) % size, y[1]]);
 
@@ -241,6 +247,8 @@ namespace Zastita_Informacija
                 {
                     // Same column
                     // if its on the top edge replace with the bottom element
+
+                    // wraping with % size wont function here
                     if ( x[0] == 0)
                     {
                         text.Add(table[size-1  , x[1]]);
@@ -300,6 +308,8 @@ namespace Zastita_Informacija
 
            
         }
+
+        // Read the file and encrypt it 
         public string EncryptFile(string inputFilePath, string outputFilePath)
         {
             // Read the plaintext from the input file
@@ -313,7 +323,7 @@ namespace Zastita_Informacija
 
             return plaintext;
         }
-
+        // Read the file and decrypt it
         public void DecryptFile(string inputFilePath, string outputFilePath)
         {
             // Read the ciphertext from the input file
@@ -324,6 +334,38 @@ namespace Zastita_Informacija
 
             // Write the plaintext to the output file
             File.WriteAllText(outputFilePath, plaintext);
+        }
+
+
+        // Encrypting and Decrypying in parallel 
+        // Foreach line in our file we do ( read , crypt , write ) in parallel 
+        // Works for multiple line .txt files 
+
+
+        public void EncryptFileParalel(string filePath ,string outputFile)
+        {
+            // Read the file lines in parallel
+            Parallel.ForEach(File.ReadLines(filePath), line =>
+            {
+                // Encrypt the line
+                var encryptedLine = Crypt(line);
+                // Write the encrypted line to a new file
+                File.AppendAllText(outputFile, encryptedLine + Environment.NewLine);
+            });
+        }
+
+        // Same read decrypt write in parallel 
+
+        public  void DecryptFileParallel(string filePath, string outputFile)
+        {
+            // Read the file lines in parallel
+            Parallel.ForEach(File.ReadLines(filePath), line =>
+            {
+                // Decrypt the line
+                var decryptedLine = Decrypt(line);
+                // Write the decrypted line to a new file
+                File.AppendAllText(outputFile, decryptedLine + Environment.NewLine);
+            });
         }
     }
 

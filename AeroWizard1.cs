@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace Zastita_Informacija
@@ -58,10 +59,7 @@ namespace Zastita_Informacija
             string[] inputString = textBox2.Text.Split(',');
             int[] input = Array.ConvertAll(inputString, int.Parse);
 
-            int[] key = { 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1,
-                          1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
-                          0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0,
-                          0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0 };
+
             int[] encryptedText, decryptedText;
 
             Program.CFB(input, out encryptedText, out decryptedText);
@@ -110,11 +108,12 @@ namespace Zastita_Informacija
         private void button6_Click(object sender, EventArgs e)
         {
             string inputString = textBox4.Text;
-            int input = int.Parse(inputString);
 
-            int encryptedText, decryptedText;
 
-            Program.RSAinput(input, out encryptedText, out decryptedText);
+            BigInteger encryptedText;
+            string decryptedText;
+
+            Program.RSAinput(inputString, out encryptedText, out decryptedText);
             richTextBox3.Text = "Encrypted Text :" + encryptedText + "\n" +
                                 "Decrypted Text :" + decryptedText;
         }
@@ -188,6 +187,11 @@ namespace Zastita_Informacija
 
                 // perform action with the file path
             }
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
